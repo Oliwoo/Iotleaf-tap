@@ -1,0 +1,32 @@
+<html xmlns="http://www.thymeleaf.org">
+    <head th:replace="fragments/header::header(${plantType.name})"></head>
+    <body>
+        <nav th:replace="fragments/header::navigation(${activePage},${subPages})"></nav>
+        <main>
+            <div class="content">
+                <section class="title">
+                    <div class="info">
+                        <h1 th:text="${plantType.name}"></h1>
+                    </div>
+                </section>
+                <section class="settings">
+                    <section-title><span>Settings</span></section-title>
+                    <section-content>
+                        <form th:action="@{${'/plantTypes/'+(plantType.id!=null?plantType.id+'/save':'save')}}" th:object="${plantType}" method="post">
+                            <div class="inputList">
+                                <div class="inputBox">
+                                    <label>Plant type name</label>
+                                    <input type="text" th:field="*{name}" required>
+                                </div>
+                            </div>
+                            <div class="submit">
+                                <input type="submit" value="Save">
+                                <a th:if="${plantType.id!=null}" th:href="@{${'/plantTypes/'+plantType.id+'/delete'}}">Delete</a>
+                            </div>
+                        </form>
+                    </section-content>
+                </section>
+            </div>
+        </main>
+    </body>
+</html>

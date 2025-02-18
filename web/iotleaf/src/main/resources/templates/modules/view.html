@@ -1,0 +1,162 @@
+<html xmlns="http://www.thymeleaf.org">
+    <head th:replace="fragments/header::header(${module.name})"></head>
+    <body>
+        <nav th:replace="fragments/header::navigation(${activePage},${subPages})"></nav>
+        <main>
+            <div class="deviceModulesPreview">
+                <div class="module">
+                    <img th:src="@{${module.plant!=null?module.plant.imgPath:'/images/no_image.png'}}">
+                </div>
+            </div>
+            <div class="content">
+                <section class="title">
+                    <div class="info">
+                        <h1 th:text="${module.name}"></h1>
+                        <h2 th:text="${module.device.name}"></h2>
+                    </div>
+                </section>
+                <section class="info">
+                    <section-title>
+                        <span>Info</span>
+                    </section-title>
+                    <section-content>
+                        <div class="infoBox">
+                            <h1>Modules</h1>
+                            <div class="label">
+                                <span>Device:</span>
+                                <span th:text="${module.device.name}"></span>
+                            </div>
+                            <div class="label">
+                                <span>Slot:</span>
+                                <span th:text="${module.slot}"></span>
+                            </div>
+                            <div class="label">
+                                <span>Status:</span>
+                                <span th:text="${module.status==true?'Enabled':'Disabled'}"></span>
+                            </div>
+                        </div>
+                        <div class="infoBox">
+                            <h1>Plant info</h1>
+                            <div class="label">
+                                <span>Plant:</span>
+                                <span th:text="${module.plant!=null?module.plant.name:'Not defined'}"></span>
+                            </div>
+                            <div class="label">
+                                <span>Age:</span>
+                                <span th:text="${module.age}"></span>
+                            </div>
+                            <div class="label">
+                                <span>Irrigation:</span>
+                                <span th:text="${module.irrigation==true?'Enabled':'Disabled'}"></span>
+                            </div>
+                        </div>
+                    </section-content>
+                </section>
+                <section class="viewTable" th:if="${configurations!=null}">
+                    <section-title>
+                        <span>Configuration's</span>
+                    </section-title>
+                    <section-content>
+                        <form th:action="@{${'/modules/'+module.device.id+'/'+module.slot+'/configurations'}}" method="post">
+                            <table>
+                                <tr>
+                                    <th>Sensor</th>
+                                    <th>Use custom</th>
+                                    <th>Min</th>
+                                    <th>Max</th>
+                                    <th></th>
+                                </tr>
+                                <tr class="filter">
+                                    <td>
+                                        <select name="sensor">
+                                            <option value="" default></option>
+                                            <option th:each="sensorItem:${sensors}" th:text="${sensorItem.name}" th:value="${sensorItem.id}" th:selected="${filter!=null&&filter.sensor==sensorItem.id}"></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="useCustom">
+                                            <option value=""></option>
+                                            <option th:text="Enabled" value="1" th:selected="${filter!=null&&filter.useCustom==true?'true':'false'}"></option>
+                                            <option th:text="Disabled" value="0" th:selected="${filter!=null&&filter.useCustom==false?'true':'false'}" default></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="min" min="0" th:value="${filter!=null?filter.min:''}" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="max" min="0" th:value="${filter!=null?filter.max:''}" />
+                                    </td>
+                                    <td>
+                                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" th:text="${'Result: '+(#lists.size(configurations))+' Configurations'}"></td>
+                                </tr>
+                                <tr th:each="configuration:${configurations}">
+                                    <td th:text="${configuration.sensor.name+' ('+configuration.sensor.format+')'}"></td>
+                                    <td>
+                                        <select th:name="|configurations[${configuration.sensor.id}].useCustom|">
+                                            <option th:text="Enabled" value="1" th:selected="${configuration.useCustom==true}"></option>
+                                            <option th:text="Disabled" value="0" th:selected="${configuration.useCustom==false}" default></option>
+                                        </select>
+                                    </td>
+                                    <td><input type="number" min="0" th:name="|configurations[${configuration.sensor.id}].min|" th:value="${configuration.min}"></td>
+                                    <td><input type="number" min="0" th:name="|configurations[${configuration.sensor.id}].max|" th:value="${configuration.max}"></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            <div class="submit">
+                                <input type="submit" value="Save">
+                            </div>
+                        </form>
+                        <script id="temp">
+                            $(document).on("change","tr input, tr select", function(){
+                                $(this).parents("form").submit();
+                            })
+                            $("#temp").remove();
+                        </script>
+                    </section-content>
+                </section>
+                <section class="settings">
+                    <section-title><span>Settings</span></section-title>
+                    <section-content>
+                        <form th:action="@{${'/modules/'+module.device.id+'/'+module.slot+'/save'}}" method="post">
+                            <div class="inputList">
+                                <div class="inputBox">
+                                    <label>Module name</label>
+                                    <input type="text" name="name" th:value="${module.name}" required>
+                                </div>
+                                <div class="inputBox">
+                                    <label>Plant</label>
+                                    <select name="plant" required>
+                                        <option value="" default>Not defined</option>
+                                        <option th:each="plantItem: ${plants}" th:text="${plantItem.name}" th:value="${plantItem.id}" th:selected="${plantItem==module.plant}"></option>
+                                    </select>
+                                </div>
+                                <div class="inputBox">
+                                    <label>Status</label>
+                                    <select name="status" required>
+                                        <option th:text="Enabled" value="1" th:selected="${module.status==true}"></option>
+                                        <option th:text="Disabled" value="0" th:selected="${module.status==false}"></option>
+                                    </select>
+                                </div>
+                                <div class="inputBox">
+                                    <label>Irrigation</label>
+                                    <select name="irrigation" required>
+                                        <option th:text="Enabled" value="1" th:selected="${module.irrigation==true}"></option>
+                                        <option th:text="Disabled" value="0" th:selected="${module.irrigation==false}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="submit">
+                                <input type="submit" value="Save">
+                                <a th:href="@{${'/modules/'+module.device.id+'/'+module.slot+'/delete'}}">Delete</a>
+                            </div>
+                        </form>
+                    </section-content>
+                </section>
+            </div>
+        </main>
+    </body>
+</html>

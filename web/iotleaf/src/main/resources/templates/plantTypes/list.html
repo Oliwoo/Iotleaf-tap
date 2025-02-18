@@ -1,0 +1,63 @@
+<html xmlns="http://www.thymeleaf.org">
+    <head th:replace="fragments/header::header('Plant types List')"></head>
+    <body>
+        <nav th:replace="fragments/header::navigation(${activePage},${subPages})"></nav>
+        <main>
+            <div class="content">
+                <section class="title">
+                    <div class="info">
+                        <h1>Plant Type's</h1>
+                        <h2>See all plant type's list</h2>
+                    </div>
+                    <div class="buttons">
+                        <a th:href="@{/plantTypes/new}"><i class="fa-solid fa-plus"></i><span>Add new</span></a>
+                    </div>
+                </section>
+                <section class="viewTable">
+                    <section-title>
+                        <span>Plant type's List</span>
+                    </section-title>
+                    <section-content>
+                        <form th:action="@{/plantTypes}" method="get">
+                            <table cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th></th>
+                                </tr>
+                                <tr class="filter">
+                                    <td>
+                                        <input type="text" name="id" th:value="${filter!=null&&filter.id!=null?filter.id:''}"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="name" th:value="${filter!=null&&filter.name!=null?filter.name:''}" />
+                                    </td>
+                                    <td>
+                                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" th:text="${'Result: '+(#lists.size(plantTypes))+' Plant Types'}"></td>
+                                </tr>
+                                <tr th:each="plantType:${plantTypes}" class="item" th:data-url="@{${'/plantTypes/'+plantType.id}}">
+                                    <td th:text="${plantType.id}"></td>
+                                    <td th:text="${plantType.name}"></td>
+                                    <td><i class="fa-solid fa-eye"></i></td>
+                                </tr>
+                            </table>
+                            <script id="temp">
+                                $(document).on("change","tr input, tr select", function(){
+                                    $(this).parents("form").submit();
+                                })
+                                $(document).on("click","tr.item",function(){
+                                    window.location.href = $(this).attr("data-url");
+                                })
+                                $("#temp").remove();
+                            </script>
+                        </form>
+                    </section-content>
+                </section>
+            </div>
+        </main>
+    </body>
+</html>

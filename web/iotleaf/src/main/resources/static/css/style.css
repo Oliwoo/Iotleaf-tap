@@ -1,0 +1,427 @@
+*{
+    font-family: "Syne";
+    box-sizing: border-box;
+    font-weight: 400;
+    color: var(--text);
+    text-decoration: none;
+    outline: none;
+}
+:root{
+    --border-spacing: 10%;
+}
+h1,h2,h3,h4,h5,h6,p{
+    margin:0px;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100vh;
+    background: var(--bg);
+    overflow: hidden;
+}
+
+/* -- NAVIGATION BAR --*/
+nav{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: max-content;
+    top:0px;
+    left: 0px;
+    position: sticky;
+    background: var(--main);
+    z-index: 999;
+}
+nav .logo{
+    padding: 16px;
+}
+nav .logo img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+nav .pages{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 56px;
+}
+nav .pages .logo{
+    width: 56px;
+    min-width: 56px;
+    height: 56px;
+    background: var(--accent);
+}
+nav .pages .pagesList{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+nav .pages .pagesList a{
+    text-decoration: none;
+    width: 56px;
+    min-width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border);
+}
+nav .pages .pagesList .spacer{
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid var(--border);
+}
+nav .pages .pagesList a[active=true]{
+    background: var(--bg);
+    color:var(--accent);
+    border-bottom: none;
+}
+nav .subPages{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background: var(--bg);
+    padding: 24px 32px;
+    gap: 16px;
+}
+nav .subPages a{
+    text-decoration: none;
+}
+nav .subPages a[active=true]{
+    color: var(--accent);
+}
+nav .pathNavigator{
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    padding: 16px 32px;
+    background: var(--main);
+}
+nav .pathNavigator a{
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+}
+nav .pathNavigator a i{
+    height: 16px;
+    width: 16px;
+    font-size: 12px;
+    line-height: 16px;
+}
+nav .pathNavigator .subPath{
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+}
+
+main{
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background: var(--main);
+}
+error-info{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+error-info i{
+    font-size: 48px;
+}
+error-info h1{
+    font-size: 64px;
+    font-weight: bold;
+}
+error-info h2{
+    font-size: 24px;
+}
+error-info p{
+    opacity: 0.5;
+}
+main .content{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100%;
+    padding: 32px;
+    background: var(--main);
+    gap: 32px;
+}
+
+section{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+section-title{
+    font-size: 20px;
+}
+
+section.title{
+    display: flex;
+    flex-direction: row;
+}
+section.title .info{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+section.title .info h1{
+    font-size: 32px;
+    font-weight: 600;
+}
+section.title .info h2{
+    font-size: 16px;
+    opacity: 0.5;
+}
+section.title .buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    height: max-content;
+}
+section.title .buttons a{
+    padding: 16px;
+    background: var(--text);
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 4px;
+}
+section.title .buttons a i,
+section.title .buttons a span{
+    color: white;
+    width: max-content;
+}
+
+section.viewTable form{
+    width: 100%;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    margin:0px;
+}
+section.viewTable table{
+    border:none;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+section.viewTable table tr{
+    width: 100%;
+}
+section.viewTable table tr.item{
+    cursor: pointer;
+}
+section.viewTable table tr:nth-child(odd){
+    background-color: var(--bg);
+}
+section.viewTable table tr td,
+section.viewTable table tr th{
+    padding: 16px;
+    text-align: start;
+    font-weight: 600;
+    font-size: 16px;
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+section.viewTable table tr td.img,
+section.viewTable table tr th.img{
+    width:64px;
+}
+section.viewTable table tr td img{
+    height: 32px;
+    width: 32px;
+    object-fit: contain;
+    border-radius: 4px;
+    mix-blend-mode: multiply;
+}
+section.viewTable table tr input,
+section.viewTable table tr select{
+    border: none;
+    width: 100%;
+    background: var(--bg);
+    padding: 12px;
+    border-radius: 4px;
+    outline: none;
+}
+section.viewTable table tr:nth-child(odd) input,
+section.viewTable table tr:nth-child(odd) select{
+    background: var(--main);
+}
+section.viewTable table tr td:last-child,
+section.viewTable table tr th:last-child{
+    width: 64px;
+}
+section.viewTable table tr button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+section.info section-content{
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+section.info section-content .infoBox{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+section.info section-content .infoBox h1{
+    font-size: 16px;
+}
+section.info section-content .infoBox .label{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+section.info section-content .infoBox p{
+    font-size: 16px;
+    opacity: 0.5;
+}
+section.info section-content .infoBox span{
+    font-size: 16px;
+    opacity: 0.5;
+    min-width: max-content;
+}
+section.info section-content .infoBox span:first-child{
+    width: 100%;
+}
+
+.deviceModulesPreview{
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 64px;
+    display: grid;
+    grid-template-columns: repeat(var(--sep), 72px);
+    gap: 8px;
+    background: var(--bg);
+}
+.deviceModulesPreview .module{
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    width: 72px;
+    height: 72px;
+    padding: 8px;
+}
+.deviceModulesPreview .module img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 100%;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    padding: 8px;
+}
+
+.plantPreview{
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 64px;
+ background: var(--bg);
+}
+.plantPreview img{
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+form .inputList{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 16px;
+}
+form .inputList .inputBox{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+form .inputList .inputBox input,
+form .inputList .inputBox select,
+form .inputList .inputBox textarea{
+    width: 100%;
+    padding:16px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    cursor: pointer;
+}
+form .inputList .inputBox textarea{
+    height: 100%;
+}
+form .inputList .inputBox.image inputImage{
+    width: 100%;
+    padding:16px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+form .inputList .inputBox.image inputImage img{
+    height: 72px;
+    width: 72px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+}
+form .submit{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 16px;
+}
+form .submit input{
+    padding: 16px;
+    background: var(--text);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    border: none;
+}
+form .submit a{
+    padding: 16px;
+    border: 1px solid var(--text);
+    border-radius: 4px;
+}

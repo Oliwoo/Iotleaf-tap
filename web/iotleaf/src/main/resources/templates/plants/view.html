@@ -1,0 +1,146 @@
+<html xmlns="http://www.thymeleaf.org">
+    <head th:replace="fragments/header::header(${plant.name})"></head>
+    <body>
+        <nav th:replace="fragments/header::navigation(${activePage},${subPages})"></nav>
+        <main>
+            <div class="plantPreview">
+                <img th:src="@{${plant.imgPath}}">
+            </div>
+            <div class="content">
+                <section class="title">
+                    <div class="info">
+                        <h1 th:text="${plant.name}"></h1>
+                        <h2 th:text="${plant.type!=null?plant.type.name:'Not defined'}"></h2>
+                    </div>
+                </section>
+                <section class="info" th:if="${plant.id!=null}">
+                    <section-title>
+                        <span>Info</span>
+                    </section-title>
+                    <section-content>
+                        <div class="infoBox">
+                            <h1>Plant</h1>
+                            <div class="label">
+                                <span>Germogliation time:</span>
+                                <span th:text="${plant.germogliationTime+' d'}"></span>
+                            </div>
+                            <div class="label">
+                                <span>Outdoor:</span>
+                                <span th:text="${plant.outdoor?'External':'Internal'}"></span>
+                            </div>
+                            <div class="label">
+                                <span>Plant type:</span>
+                                <span th:text="${plant.type!=null?plant.type.name:'Not defined'}"></span>
+                            </div>
+                        </div>
+                        <div class="infoBox">
+                            <h1>Plant Info</h1>
+                            <p th:text="${plant.plantInfo}"></p>
+                        </div>
+                        <div class="infoBox">
+                            <h1>Allevation Info</h1>
+                            <p th:text="${plant.allevationInfo}"></p>
+                        </div>
+                    </section-content>
+                </section>
+                <section class="viewTable" th:if="${configurations!=null}">
+                    <section-title>
+                        <span>Configuration's</span>
+                    </section-title>
+                    <section-content>
+                        <form th:action="@{${'/plants/'+plant.id+'/configurations'}}" method="post">
+                            <table>
+                                <tr>
+                                    <th>Sensor</th>
+                                    <th>Min</th>
+                                    <th>Max</th>
+                                    <th></th>
+                                </tr>
+                                <tr class="filter">
+                                    <td>
+                                        <select name="sensor">
+                                            <option value="" default></option>
+                                            <option th:each="sensorItem:${sensors}" th:text="${sensorItem.name}" th:value="${sensorItem.id}" th:selected="${filter!=null&&filter.sensor==sensorItem.id}"></option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="min" min="0" th:value="${filter!=null?filter.min:''}" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="max" min="0" th:value="${filter!=null?filter.max:''}" />
+                                    </td>
+                                    <td>
+                                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" th:text="${'Result: '+(#lists.size(configurations))+' Configurations'}"></td>
+                                </tr>
+                                <tr th:each="configuration:${configurations}">
+                                    <td th:text="${configuration.sensor.name+' ('+configuration.sensor.format+')'}"></td>
+                                    <td><input type="number" min="0" th:name="|configurations[${configuration.sensor.id}].min|" th:value="${configuration.min}"></td>
+                                    <td><input type="number" min="0" th:name="|configurations[${configuration.sensor.id}].max|" th:value="${configuration.max}"></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            <div class="submit">
+                                <input type="submit" value="Save">
+                            </div>
+                        </form>
+                    </section-content>
+                </section>
+                <section class="settings">
+                    <section-title><span>Settings</span></section-title>
+                    <section-content>
+                        <form th:action="@{${'/plants/'+(plant.id!=null?plant.id+'/save':'save')}}" method="post" th:object="${plant}" enctype="multipart/form-data">
+                            <input type="hidden" th:field="*{id}">
+                            <div class="inputList">
+                                <div class="inputBox">
+                                    <label>Plant name</label>
+                                    <input type="text" th:field="*{name}" required>
+                                </div>
+                                <div class="inputBox">
+                                    <label>Plant type</label>
+                                    <select th:field="*{type}" required>
+                                        <option th:each="plantType: ${plantTypes}" th:text="${plantType.name}" th:value="${plantType.id}" th:selected="${plantType==type}"></option>
+                                    </select>
+                                </div>
+                                <div class="inputBox">
+                                    <label>Outdoor</label>
+                                    <select th:field="*{outdoor}" required>
+                                        <option th:text="External" value="1" th:selected="${outdoor==true}"></option>
+                                        <option th:text="Internal" value="0" th:selected="${outdoor==false}"></option>
+                                    </select>
+                                </div>
+                                <div class="inputBox">
+                                    <label>Germogliation time</label>
+                                    <input type="number" th:field="*{germogliationTime}" min="1" required>
+                                </div>
+                                <div class="inputBox image">
+                                    <label>Image</label>
+                                    <inputImage>
+                                        <input type="hidden" th:field="*{imgPath}">
+                                        <img th:src="@{*{imgPath}}">
+                                        <input type="file" name="image" accept="image/*">
+                                    </inputImage>
+                                </div>
+                                <div class="inputBox">
+                                    <label>Allevation info</label>
+                                    <textarea th:field="*{allevationInfo}" required></textarea>
+                                </div>
+                                <div class="inputBox">
+                                    <label>Plant info</label>
+                                    <textarea th:field="*{plantInfo}" required></textarea>
+                                </div>
+                            </div>
+                            <div class="submit">
+                                <input type="submit" value="Save">
+                                <a th:if="${plant.id!=null}" th:href="@{${'/plants/'+plant.id+'/delete'}}">Delete</a>
+                            </div>
+                        </form>
+                    </section-content>
+                </section>
+            </div>
+        </main>
+    </body>
+</html>

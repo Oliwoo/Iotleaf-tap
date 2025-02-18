@@ -1,0 +1,36 @@
+<html xmlns="http://www.thymeleaf.org">
+    <head th:replace="fragments/header::header(${sensorType.name})"></head>
+    <body>
+        <nav th:replace="fragments/header::navigation(${activePage},${subPages})"></nav>
+        <main>
+            <div class="content">
+                <section class="title">
+                    <div class="info">
+                        <h1 th:text="${sensorType.name + (sensorType.format!=null?' ('+sensorType.format+')':'')}"></h1>
+                    </div>
+                </section>
+                <section class="settings">
+                    <section-title><span>Settings</span></section-title>
+                    <section-content>
+                        <form th:action="@{${'/sensorTypes/'+(sensorType.id!=null?sensorType.id+'/save':'save')}}" th:object="${sensorType}" method="post">
+                            <div class="inputList">
+                                <div class="inputBox">
+                                    <label>Sensor type name</label>
+                                    <input type="text" th:field="*{name}" required>
+                                </div>
+                                <div class="inputBox">
+                                    <label>Format</label>
+                                    <input type="text" th:field="*{format}" required>
+                                </div>
+                            </div>
+                            <div class="submit">
+                                <input type="submit" value="Save">
+                                <a th:if="${sensorType.id!=null}" th:href="@{${'/sensorTypes/'+sensorType.id+'/delete'}}">Delete</a>
+                            </div>
+                        </form>
+                    </section-content>
+                </section>
+            </div>
+        </main>
+    </body>
+</html>
