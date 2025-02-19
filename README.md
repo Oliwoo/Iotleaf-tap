@@ -9,16 +9,16 @@
 
 Il sistema è basato su un'architettura a microservizi e utilizza le seguenti tecnologie:
 
-- [Docker](https://docs.docker.com/): Permette di eseguire i servizi in ambienti containerizzati, garantendo scalabilità, isolamento e facilità di deploy su diverse infrastrutture.
-- [Mosquitto](https://hub.docker.com/_/eclipse-mosquitto): Scelto come broker MQTT per la sua leggerezza e affidabilità nella gestione della comunicazione tra dispositivi IoT e backend.
-- [mqtt2KafkaBridge](https://hub.docker.com/r/marmaechler/mqtt2kafkabridge): Convertitore da MQTT a Kafka per permettere l'integrazione con uno streaming event-based scalabile.
-- [Zookeeper](https://hub.docker.com/r/bitnami/zookeeper): Necessario per gestire il coordinamento e la configurazione dei broker Kafka, garantendo alta disponibilità e affidabilità.
-- [Kafka](https://hub.docker.com/r/bitnami/kafka): Sistema di messaggistica distribuito scelto per la sua capacità di gestire flussi di dati in tempo reale con alta resilienza e throughput elevato.
-- [Kafka UI](https://hub.docker.com/r/provectuslabs/kafka-ui): Strumento di monitoraggio per una gestione più semplice dei topic Kafka.
-- [Spring Boot](https://spring.io/projects/spring-boot): Utilizzato per sviluppare i microservizi backend grazie alla sua modularità, scalabilità e integrazione con Kafka e database relazionali.
-- [Prometheus](https://hub.docker.com/r/prom/prometheus): Scelto per il monitoraggio del sistema grazie alla sua capacità di raccogliere e analizzare metriche in tempo reale.
-- [Grafana](https://hub.docker.com/r/grafana/grafana): Dashboard avanzata per la visualizzazione delle metriche raccolte da Prometheus, utile per analizzare il funzionamento del sistema.
-- [MySQL](https://hub.docker.com/_/mysql): Database relazionale utilizzato per la sua affidabilità e per la gestione delle configurazioni e dei dati storici raccolti.
+- [Docker](https://docs.docker.com/): Docker garantisce isolamento, scalabilità e facilità di deployment. Permette di eseguire tutti i servizi in ambienti containerizzati, evitando problemi di compatibilità e semplificando la gestione delle dipendenze. Con Docker Compose, l'intero sistema può essere avviato con un solo comando, mentre il supporto per il monitoraggio e logging (Prometheus, Grafana) rende debugging e manutenzione più efficienti. Inoltre, facilita scalabilità orizzontale, aggiornamenti rapidi e portabilità tra diversi ambienti.
+- [Mosquitto](https://hub.docker.com/_/eclipse-mosquitto): L'uso di Mosquitto si basa sul fatto che MQTT è il protocollo più diffuso nei dispositivi smart grazie alla sua leggerezza e basso consumo di risorse. Mosquitto è un broker MQTT efficiente e scalabile, perfetto per gestire la comunicazione tra dispositivi IoT e il backend con latenza minima. Inoltre, supporta connessioni affidabili e sicure, è facile da configurare e si integra perfettamente con il resto dell’architettura, consentendo la trasmissione di dati in tempo reale con un overhead minimo.
+- [mqtt2KafkaBridge](https://hub.docker.com/r/marmaechler/mqtt2kafkabridge): L'uso di mqtt2kafkabridge nasce dall'esigenza di intefacciare MQTT con Kafka, combinando la leggerezza di MQTT per i dispositivi IoT con la scalabilità di Kafka per l'elaborazione dei dati in streaming. Questo bridge permette di convertire i messaggi MQTT in eventi Kafka, garantendo affidabilità, persistenza e gestione distribuita dei dati, essenziale per analisi in tempo reale e automazioni avanzate. 
+- [Zookeeper](https://hub.docker.com/r/bitnami/zookeeper): Zookeeper è essenziale per la gestione e il coordinamento di Kafka, garantendo alta disponibilità, sincronizzazione tra i broker e gestione dei metadati dei topic. Senza Zookeeper, Kafka non potrebbe funzionare in modo affidabile in un ambiente distribuito, rendendolo un componente fondamentale per la scalabilità e stabilità del sistema.
+- [Kafka](https://hub.docker.com/r/bitnami/kafka): Kafka gioca un ruolo chiave nel gestire e processare i flussi di dati generati dai dispositivi IoT. Kafka viene utilizzato come piattaforma di streaming per la gestione dei dati in tempo reale, utile per garantire l’affidabilità e la scalabilità dei dati raccolti, per l'elaborazione e l'automazione dei processi
+- [Kafka UI](https://hub.docker.com/r/provectuslabs/kafka-ui): Kafka-UI è un'interfaccia grafica che semplifica la gestione e monitoraggio dei cluster Kafka. È utile per visualizzare e interagire con i topic e i messaggi all'interno di Kafka, senza dover utilizzare la riga di comando o script complessi.
+- [Spring Boot](https://spring.io/projects/spring-boot): Spring Boot è utilizzato come consumer Kafka e per data processing per la sua facilità d'uso e rapidità nello sviluppo. Con Spring Kafka, integra facilmente Kafka per ricevere messaggi e processarli in tempo reale. La sua architettura a microservizi consente di scalare facilmente l'applicazione, mentre la modularità di Spring Boot facilita la gestione del sistema, rendendolo ideale per elaborare i dati provenienti dai dispositivi IoT in modo efficiente e scalabile. Inoltre permette di fornire una utile interfaccia web per la gestione dei dispositivi e arrichment dei dati attraverso database.
+- [Prometheus](https://hub.docker.com/r/prom/prometheus): Prometheus viene utilizzato per il monitoraggio e la raccoglimento delle metriche in tempo reale. Esso raccoglie dati da vari componenti del sistema (come Spring Boot, Kafka, e Mosquitto), monitorando performance, utilizzo delle risorse e altri parametri operativi. Questi dati vengono poi analizzati per garantire il corretto funzionamento del sistema, facilitando il debug e la gestione delle risorse.
+- [Grafana](https://hub.docker.com/r/grafana/grafana): Grafana viene utilizzato per la visualizzazione delle metriche raccolte da Prometheus. Fornisce dashboard interattive e facilmente configurabili per monitorare in tempo reale le performance e lo stato del sistema, come l'attività dei dispositivi IoT, l'uso delle risorse, e altre metriche cruciali. Con Grafana, è possibile avere una panoramica visiva chiara delle operazioni, rendendo più facile l'analisi, il debugging e l'ottimizzazione del sistema.
+- [MySQL](https://hub.docker.com/_/mysql): MySQL viene utilizzato per archiviare informazioni persistenti come le impostazioni dei dispositivi, le registrazioni delle piante, e altre configurazioni del sistema. MySQL garantisce affidabilità e supporta query complesse, consentendo di gestire e recuperare facilmente i dati necessari per il funzionamento e la personalizzazione del sistema IoT.
 
 ## ✨ Funzionamento
 
@@ -27,7 +27,7 @@ IoTLeaf possiede una comoda interfaccia per gestire `dispositivi`, `moduli`, `se
 - [Devices](http://localhost:8080/devices): Gestione dei dispositivi registrati e dei rispettivi moduli ad esso connessi.
 - [Plants](http://localhost:8080/plants): Gestione delle piante e delle relative configurazioni di base.
 - [Plant Types](http://localhost:8080/plantTypes): Gestione delle categorie di piante.
-- [Sensors](http://localhost:8080/sensors): Gestione dei tipi di sensori supportati e dei relativi formati.
+- [Sensors](http://localhost:8080/sensorTypes): Gestione dei tipi di sensori supportati e dei relativi formati.
 
 ### 🪪 Registrazione dispositivo al sistema
 
@@ -96,6 +96,12 @@ cd emulator
 npm install
 npm start
 ```
+
+### 🗃️ Link rapidi
+- [Kafka UI](http://localhost:8130)
+- [Prometheus](http://localhost:9090)
+- [IoTLeaf UI](http://localhost:8080)
+- [Grafana Dashboard](http://localhost:8131)
 
 ## ⚙️ Configurazione del file `.env`
 
