@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT Device Emulator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="view">
+        <div class="preview">
+            <img src="preview.png">
+        </div>
+        <div class="pages">
+            <div class="page" id="register">
+                <h1>Registra Dispositivo</h1>
+                <form id="device-form">
+                    <label>
+                        <input type="checkbox" id="auto-generate" checked> Generazione automatica
+                    </label>
+                    
+                    <label>Modello:</label>
+                    <input type="text" id="model" placeholder="Es. IoT-Sensor-01">
+            
+                    <label>Slot:</label>
+                    <input type="number" id="slots" placeholder="Es. 4">
+            
+                    <label>Network:</label>
+                    <input type="text" id="network" placeholder="Es. 192.168.1.0/24">
+            
+                    <label>IP Address:</label>
+                    <input type="text" id="ipAddress" placeholder="Es. 192.168.1.100">
+            
+                    <label>MAC Address:</label>
+                    <input type="text" id="macAddress" placeholder="Es. AA:BB:CC:DD:EE:FF">
+            
+                    <label>Firmware:</label>
+                    <input type="text" id="firmware" placeholder="Es. 1.0.0">
+            
+                    <label>Irrigation:</label>
+                    <select id="irrigation">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+            
+                    <button type="submit">Registra Dispositivo</button>
+                </form>
+            </div>
+            <div class="page hidden" id="dataEmulation">
+                <h1>Device id: (<span id="device_id">-</span>)</h1>
+                <div class="modules">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="mqttLogger">
+            <h1>Mqtt data exchange</h1>
+        </div>
+    </div>
+    <script src="renderer.js"></script>
+</body>
+</html>

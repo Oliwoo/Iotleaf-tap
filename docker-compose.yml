@@ -1,6 +1,6 @@
-version: '3.8'
-
 services:
+
+# -- DATA INGESTION -- #
   mosquitto:
     image: eclipse-mosquitto:latest
     container_name: mosquitto
@@ -9,8 +9,8 @@ services:
     networks:
       - iotleaf-network
     ports:
-      - "1883:1883"  # Porta MQTT standard
-      - "9001:9001"  # Porta WebSocket (opzionale)
+      - "${MOSQUITTO_MQTT_PORT}:1883"
+      - "${MOSQUITTO_WEBSOCKET_PORT}:9001"
     volumes:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
@@ -36,7 +36,7 @@ services:
       - zookeeper
     restart: always
     ports:
-      - 9092:9092
+      - ${KAFKA_PORT}:9092
       - 29092:29092
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -59,8 +59,11 @@ services:
       # blocks until kafka is reachable
       kafka-topics --bootstrap-server kafka:9092 --list
 
-      echo -e 'Creating kafka topics'
+      echo -e 'Creating Report topic'
       kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic report --replication-factor 1 --partitions 1
+
+      echo -e 'Creating Registration topic'
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic registration --replication-factor 1 --partitions 1
 
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server kafka:9092 --list
@@ -87,13 +90,30 @@ services:
       - iotleaf-network
     image: provectuslabs/kafka-ui:latest
     ports:
-      - 8130:8080
+      - ${KAFKA_UI_PORT}:8080
     depends_on:
       - kafka
     environment:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=PLAINTEXT://kafka:9092
 
+# -- DATA PROCESSING -- #
+  springboot:
+    build:
+      context: web/.
+    container_name: springboot
+    networks:
+      - iotleaf-network
+    ports:
+      - "${SPRING_SERVER_PORT}:8080"
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/uploads
+
+# -- DATA VISUALIZATION -- #
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -102,9 +122,9 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
-      - "9090:9090"
+      - "${PROMETHEUS_PORT}:9090"
 
-  grafana:
+  grafana: 
     image: grafana/grafana:latest
     container_name: grafana
     networks:
@@ -112,35 +132,21 @@ services:
     depends_on:
       - prometheus
     ports:
-      - "8131:3000"
+      - "${GRAFANA_PORT}:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
-
-  springboot:
-    build:
-      context: web/.
-    container_name: springboot
-    networks:
-      - iotleaf-network
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mysql
-    env_file:
-      - .env
-    volumes:
-      - ./uploads:/app/uploads
       
+# -- DATABASE -- #
   mysql:
     image: mysql:8.0
     container_name: mysql
     networks:
       - iotleaf-network
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT}:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: iotleaf
@@ -149,10 +155,12 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
+# -- NETWORK -- #
 networks:
   iotleaf-network:
     driver: bridge
 
+# -- VOLUMES -- #
 volumes:
   db_data:
   grafana:
