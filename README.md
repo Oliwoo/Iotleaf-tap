@@ -2,25 +2,47 @@
 
 ### 📝 Descrizione
 
-> IotLeaf è un sistema avanzato per la gestione distribuita di dispositivi smart, progettato per monitorare e controllare automaticamente le condizioni delle piante. Attraverso una pipeline di streaming ad-hoc, il sistema raccoglie dati sui parametri ambientali (umidità del suolo, illuminazione, temperatura) e attiva azioni automatizzate come irrigazione, regolazione della luce e controllo della temperatura.
+> IoTLeaf è una piattaforma avanzata per la gestione distribuita di dispositivi IoT, progettata per il monitoraggio e il controllo automatico delle condizioni ambientali delle piante. Questo sistema sfrutta una pipeline di streaming ad-hoc per raccogliere e analizzare in tempo reale i dati provenienti da sensori IoT (come temperatura, umidità del suolo, luminosità) e per attuare azioni automatizzate come l'irrigazione, la regolazione dell'illuminazione e il controllo della temperatura.
+
+In un contesto di crescente diffusione dell'Internet delle Cose (IoT), IoTLeaf si distingue come una soluzione SaaS (Software as a Service), che permette agli utenti di accedere facilmente alla piattaforma attraverso un'interfaccia web. Non è necessario gestire hardware o infrastruttura, poiché IoTLeaf è completamente basato su cloud. Gli utenti possono monitorare e automatizzare le condizioni delle loro piante in modo intuitivo, scalabile e senza doversi preoccupare della gestione della tecnologia sottostante.
+
+Questa piattaforma è progettata per supportare dispositivi IoT scalabili e ad alta frequenza di aggiornamenti, sfruttando la potenza di Kafka per l'elaborazione dei dati in tempo reale, Prometheus per il monitoraggio delle performance e Grafana per la visualizzazione delle metriche. IoTLeaf rappresenta una soluzione moderna ed efficiente per chi desidera una gestione ottimizzata e intelligente di dispositivi IoT in ambienti complessi, come quelli agricoli o domestici, con l'obiettivo di migliorare la produttività e il benessere delle piante.
 
 ### 🛠️ Architettura del Sistema
 ![Architettura del Sistema](architecture.png)
 
 Il sistema è basato su un'architettura a microservizi e utilizza le seguenti tecnologie:
 
-- [Docker](https://docs.docker.com/): Docker garantisce isolamento, scalabilità e facilità di deployment. Permette di eseguire tutti i servizi in ambienti containerizzati, evitando problemi di compatibilità e semplificando la gestione delle dipendenze. Con Docker Compose, l'intero sistema può essere avviato con un solo comando, mentre il supporto per il monitoraggio e logging (Prometheus, Grafana) rende debugging e manutenzione più efficienti. Inoltre, facilita scalabilità orizzontale, aggiornamenti rapidi e portabilità tra diversi ambienti.
-- [Mosquitto](https://hub.docker.com/_/eclipse-mosquitto): L'uso di Mosquitto si basa sul fatto che MQTT è il protocollo più diffuso nei dispositivi smart grazie alla sua leggerezza e basso consumo di risorse. Mosquitto è un broker MQTT efficiente e scalabile, perfetto per gestire la comunicazione tra dispositivi IoT e il backend con latenza minima. Inoltre, supporta connessioni affidabili e sicure, è facile da configurare e si integra perfettamente con il resto dell’architettura, consentendo la trasmissione di dati in tempo reale con un overhead minimo.
-- [mqtt2KafkaBridge](https://hub.docker.com/r/marmaechler/mqtt2kafkabridge): L'uso di mqtt2kafkabridge nasce dall'esigenza di intefacciare MQTT con Kafka, combinando la leggerezza di MQTT per i dispositivi IoT con la scalabilità di Kafka per l'elaborazione dei dati in streaming. Questo bridge permette di convertire i messaggi MQTT in eventi Kafka, garantendo affidabilità, persistenza e gestione distribuita dei dati, essenziale per analisi in tempo reale e automazioni avanzate. 
-- [Zookeeper](https://hub.docker.com/r/bitnami/zookeeper): Zookeeper è essenziale per la gestione e il coordinamento di Kafka, garantendo alta disponibilità, sincronizzazione tra i broker e gestione dei metadati dei topic. Senza Zookeeper, Kafka non potrebbe funzionare in modo affidabile in un ambiente distribuito, rendendolo un componente fondamentale per la scalabilità e stabilità del sistema.
-- [Kafka](https://hub.docker.com/r/bitnami/kafka): Kafka gioca un ruolo chiave nel gestire e processare i flussi di dati generati dai dispositivi IoT. Kafka viene utilizzato come piattaforma di streaming per la gestione dei dati in tempo reale, utile per garantire l’affidabilità e la scalabilità dei dati raccolti, per l'elaborazione e l'automazione dei processi
-- [Kafka UI](https://hub.docker.com/r/provectuslabs/kafka-ui): Kafka-UI è un'interfaccia grafica che semplifica la gestione e monitoraggio dei cluster Kafka. È utile per visualizzare e interagire con i topic e i messaggi all'interno di Kafka, senza dover utilizzare la riga di comando o script complessi.
-- [Spring Boot](https://spring.io/projects/spring-boot): Spring Boot è utilizzato come consumer Kafka e per data processing per la sua facilità d'uso e rapidità nello sviluppo. Con Spring Kafka, integra facilmente Kafka per ricevere messaggi e processarli in tempo reale. La sua architettura a microservizi consente di scalare facilmente l'applicazione, mentre la modularità di Spring Boot facilita la gestione del sistema, rendendolo ideale per elaborare i dati provenienti dai dispositivi IoT in modo efficiente e scalabile. Inoltre permette di fornire una utile interfaccia web per la gestione dei dispositivi e arrichment dei dati attraverso database.
-- [Prometheus](https://hub.docker.com/r/prom/prometheus): Prometheus viene utilizzato per il monitoraggio e la raccoglimento delle metriche in tempo reale. Esso raccoglie dati da vari componenti del sistema (come Spring Boot, Kafka, e Mosquitto), monitorando performance, utilizzo delle risorse e altri parametri operativi. Questi dati vengono poi analizzati per garantire il corretto funzionamento del sistema, facilitando il debug e la gestione delle risorse.
-- [Grafana](https://hub.docker.com/r/grafana/grafana): Grafana viene utilizzato per la visualizzazione delle metriche raccolte da Prometheus. Fornisce dashboard interattive e facilmente configurabili per monitorare in tempo reale le performance e lo stato del sistema, come l'attività dei dispositivi IoT, l'uso delle risorse, e altre metriche cruciali. Con Grafana, è possibile avere una panoramica visiva chiara delle operazioni, rendendo più facile l'analisi, il debugging e l'ottimizzazione del sistema.
-- [MySQL](https://hub.docker.com/_/mysql): MySQL viene utilizzato per archiviare informazioni persistenti come le impostazioni dei dispositivi, le registrazioni delle piante, e altre configurazioni del sistema. MySQL garantisce affidabilità e supporta query complesse, consentendo di gestire e recuperare facilmente i dati necessari per il funzionamento e la personalizzazione del sistema IoT.
+- [Docker](https://docs.docker.com/): La containerizzazione con Docker assicura l'isolamento dei vari servizi, facilitando il deployment e la gestione delle dipendenze. Grazie a Docker Compose, l'intero sistema può essere avviato con un solo comando, riducendo la complessità operativa. Il supporto per il monitoraggio e il logging (tramite strumenti come Prometheus e Grafana) migliora il processo di debugging e gestione delle risorse.
+- [Mosquitto](https://hub.docker.com/_/eclipse-mosquitto)(MQTT Broker): Mosquitto, un broker MQTT leggero e scalabile, viene utilizzato per la comunicazione tra i dispositivi IoT e il sistema backend. Il protocollo MQTT è particolarmente adatto per dispositivi a bassa potenza e larghe reti di sensori, poiché permette una comunicazione efficiente e a bassa latenza, con un utilizzo minimo delle risorse.
+- [mqtt2KafkaBridge](https://hub.docker.com/r/marmaechler/mqtt2kafkabridge): Questo componente svolge un ruolo cruciale nell'interfacciare MQTT con Kafka, combinando la leggerezza del protocollo MQTT con la scalabilità e la resilienza di Kafka per l'elaborazione dei dati in streaming. Il bridge permette di convertire i messaggi MQTT in eventi Kafka, che possono poi essere processati, analizzati e archiviati in modo distribuito e sicuro.
+- [Zookeeper](https://hub.docker.com/r/bitnami/zookeeper): Essenziale per il coordinamento e la gestione di Kafka, Zookeeper garantisce la sincronizzazione tra i broker, gestisce i metadati dei topic e permette l'alta disponibilità del sistema. La sua presenza è fondamentale per il funzionamento stabile di Kafka in ambienti distribuiti, assicurando che i dati vengano gestiti correttamente anche in scenari di grande carico.
+- [Kafka](https://hub.docker.com/r/bitnami/kafka): La scelta di Kafka come sistema di messaggistica distribuita consente di gestire grandi flussi di dati in tempo reale con un'elevata capacità di throughput e una bassa latenza. Kafka è ideale per raccogliere e gestire i dati provenienti dai dispositivi IoT, garantendo che i dati siano sempre disponibili e facilmente accessibili per elaborazioni future.
+- [Kafka UI](https://hub.docker.com/r/provectuslabs/kafka-ui): Un'interfaccia grafica intuitiva per la gestione dei topic Kafka. Questa dashboard facilita il monitoraggio delle attività, la gestione dei topic e la visualizzazione dei messaggi, rendendo più semplice la gestione operativa dei flussi di dati.
+- [Spring Boot](https://spring.io/projects/spring-boot): Framework utilizzato per sviluppare i microservizi backend. La sua modularità e scalabilità permettono una rapida integrazione con Kafka e altri sistemi, offrendo un’architettura robusta per l’elaborazione dei dati. Spring Boot rende anche facile la creazione di API per il controllo e la gestione dei dispositivi IoT.
+- [Prometheus](https://hub.docker.com/r/prom/prometheus): Strumento di monitoraggio delle performance che raccoglie e analizza le metriche in tempo reale. Prometheus permette di monitorare la salute e le prestazioni dei vari componenti del sistema (dispositivi IoT, Kafka, microservizi) e inviare allarmi in caso di anomalie.
+- [Grafana](https://hub.docker.com/r/grafana/grafana): Utilizzato per la visualizzazione delle metriche raccolte da Prometheus. Le dashboard interattive di Grafana permettono agli utenti di monitorare in tempo reale il funzionamento del sistema, analizzando i dati relativi ai dispositivi IoT, alla gestione dei topic Kafka e alle performance generali.
+- [MySQL](https://hub.docker.com/_/mysql): Database relazionale utilizzato per archiviare dati persistenti, come le configurazioni dei dispositivi, le registrazioni delle piante e altre informazioni storiche necessarie per la gestione e la personalizzazione del sistema.
 
-## ✨ Funzionamento
+## ✨ Funzionamento della piattaforma
+IoTLeaf raccoglie e elabora i dati in tempo reale grazie alla combinazione di tecnologie moderne come Kafka, Mosquitto e Spring Boot. I dispositivi IoT inviano periodicamente dati relativi alle condizioni ambientali al sistema tramite il protocollo MQTT, che vengono poi trasformati in eventi Kafka. Questi eventi vengono elaborati da microservizi sviluppati con Spring Boot, che attivano azioni automatizzate (come l'irrigazione delle piante) in base ai parametri rilevati.
+
+Tutti i dati vengono monitorati in tempo reale tramite Prometheus e visualizzati in dashboard interattive su Grafana, consentendo agli utenti di visualizzare facilmente lo stato del sistema, le performance e il benessere delle piante.
+
+## 📦 Installazione e Configurazione
+IoTLeaf è progettato per essere facilmente deployato tramite Docker. Gli utenti possono clonare il repository, configurare le variabili necessarie nel file .env e avviare i servizi con un semplice comando. L'intero sistema è pronto all'uso in pochi minuti.
+
+Clona il repository e avvia i servizi con:
+```sh
+git clone https://github.com/Oliwoo/Iotleaf-tap.git
+cd IotLeaf-tap
+docker-compose up -d
+```
+
+Verifica i servizi:
+```sh
+docker ps
+```
 
 ### 🔧 Configurazione WebUI IoTLeaf
 IoTLeaf possiede una comoda interfaccia per gestire `dispositivi`, `moduli`, `sensori`, `piante` e relative `categorie` sulla porta `8080`.
@@ -74,20 +96,6 @@ Il dispositivo deve quindi iscriversi al topic `registration/<request_id>/respon
 }
 ```
 
-## 👷 Installazione
-
-Clona il repository e avvia i servizi con:
-```sh
-git clone https://github.com/Oliwoo/Iotleaf-tap.git
-cd IotLeaf-tap
-docker-compose up -d
-```
-
-Verifica i servizi:
-```sh
-docker ps
-```
-
 ## Testing
 
 Per testare il sistema, utilizza l'emulatore basato su Electron:
@@ -96,6 +104,9 @@ cd emulator
 npm install
 npm start
 ```
+
+## 🔒 Sicurezza e Scalabilità
+Essendo una piattaforma cloud-based e SaaS, IoTLeaf è progettata per essere scalabile orizzontalmente, permettendo l'aggiunta di nuovi dispositivi e sensori senza impatti significativi sulle performance. Inoltre, la gestione sicura delle comunicazioni tra i dispositivi e il backend è garantita da MQTT, Kafka e altre misure di sicurezza integrate.
 
 ### 🗃️ Link rapidi
 - [Kafka UI](http://localhost:8130)
