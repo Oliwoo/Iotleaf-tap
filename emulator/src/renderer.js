@@ -110,8 +110,7 @@ document.getElementById("device-form").addEventListener("submit", (event) => {
     const slots = autoGenerate ? Math.floor(Math.random() * 8) : document.getElementById("network").value;
     const network = autoGenerate ? `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}` : document.getElementById("ipAddress").value;
     const ipAddress = autoGenerate ? `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}` : document.getElementById("ipAddress").value;
-    //const macAddress =  autoGenerate ? `XX:XX:XX:${Math.floor(Math.random() * 100)}:${Math.floor(Math.random() * 100)}:${Math.floor(Math.random() * 100)}` : document.getElementById("macAddress").value;
-    const macAddress = "XX:XX:XX:XX:XX:XX";
+    const macAddress =  autoGenerate ? `XX:XX:XX:${Math.floor(Math.random() * 100)}:${Math.floor(Math.random() * 100)}:${Math.floor(Math.random() * 100)}` : document.getElementById("macAddress").value;
     const firmware = autoGenerate ? `v${Math.random().toFixed(2)}` : document.getElementById("firmware").value;
     const uptime = 0;
 
