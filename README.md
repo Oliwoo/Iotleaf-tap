@@ -6,7 +6,7 @@
 
 In un contesto di crescente diffusione dell'Internet delle Cose (IoT), IoTLeaf si distingue come una soluzione SaaS (Software as a Service), che permette agli utenti di accedere facilmente alla piattaforma attraverso un'interfaccia web. Non è necessario gestire hardware o infrastruttura, poiché IoTLeaf è completamente basato su cloud. Gli utenti possono monitorare e automatizzare le condizioni delle loro piante in modo intuitivo, scalabile e senza doversi preoccupare della gestione della tecnologia sottostante.
 
-Questa piattaforma è progettata per supportare dispositivi IoT scalabili e ad alta frequenza di aggiornamenti, sfruttando la potenza di Kafka per l'elaborazione dei dati in tempo reale, Prometheus per il monitoraggio delle performance e Grafana per la visualizzazione delle metriche. IoTLeaf rappresenta una soluzione moderna ed efficiente per chi desidera una gestione ottimizzata e intelligente di dispositivi IoT in ambienti complessi, come quelli agricoli o domestici, con l'obiettivo di migliorare la produttività e il benessere delle piante.
+Questa piattaforma è progettata per supportare dispositivi IoT scalabili e ad alta frequenza di aggiornamenti, sfruttando la potenza di Kafka per l'elaborazione dei dati in tempo reale, Prometheus e Grafna per il monitoraggio e la visualizzazione delle metriche. IoTLeaf rappresenta una soluzione moderna ed efficiente per chi desidera una gestione ottimizzata e intelligente di dispositivi IoT in ambienti complessi, come quelli agricoli o domestici, con l'obiettivo di migliorare la produttività e il benessere delle piante.
 
 ### 🛠️ Architettura del Sistema
 ![Architettura del Sistema](architecture.png)
