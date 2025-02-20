@@ -36,7 +36,7 @@ Clona il repository e avvia i servizi con:
 ```sh
 git clone https://github.com/Oliwoo/Iotleaf-tap.git
 cd IotLeaf-tap
-docker-compose up -d
+docker-compose up --build -d
 ```
 
 Verifica i servizi:
